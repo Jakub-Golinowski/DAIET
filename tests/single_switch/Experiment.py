@@ -7,10 +7,11 @@ import subprocess
 import time
 import sys
 
+
 class Experiment:
 
     def __init__(self):
-        self.number_of_hosts = 12
+        self.number_of_hosts = 4
         self.folder = "."
 
     def run_cmd(self, cmd):
@@ -39,20 +40,23 @@ class Experiment:
 
         # Run switch
         print self.run_cmd("docker image pull p4lang/behavioral-model")
-        print self.run_cmd("screen -S bmv2 -d -m docker container run --name bmv2 --cpuset-cpus=\"4,5,6,7\" --network host -v "+self.folder+":/Testbed -e CMD_LINE=\""+cmdline+"\" -ti p4lang/behavioral-model bash")
+        print self.run_cmd("screen -S bmv2 -d -m docker container run --name bmv2 --cpuset-cpus=\"1,2\" --network host -v "+self.folder+":/Testbed -e CMD_LINE=\""+cmdline+"\" -ti p4lang/behavioral-model bash")
 
         # Run hosts
         print self.run_cmd("mkdir /var/run/netns")
         for i in range(1, self.number_of_hosts+2):
 
-            print self.run_cmd("screen -S h"+str(i)+" -d -m docker container run --name h"+str(i)+" -h h"+str(i)+" --cpuset-cpus=\""+str(7+(i*2)-1)+","+str(7+(i*2))+"\" --cap-add=NET_ADMIN --cap-add=SYS_ADMIN -v "+self.folder+":/Testbed -ti openjdk bash")
+            #original line for 12 hosts (with 2 core per host)
+            #print self.run_cmd("screen -S h"+str(i)+" -d -m docker container run --name h"+str(i)+" -h h"+str(i)+" --cpuset-cpus=\""+str(7+(i*2)-1)+","+str(7+(i*2))+"\" --cap-add=NET_ADMIN --cap-add=SYS_ADMIN -v "+self.folder+":/Testbed -ti openjdk bash")
 
+            #configuration for my laptop for 4 hosts (with 1 core per host)
+            print self.run_cmd("screen -S h"+str(i)+" -d -m docker container run --name h"+str(i)+" -h h"+str(i)+" --cpuset-cpus=\""+str((i+2))+"\" --cap-add=NET_ADMIN --cap-add=SYS_ADMIN -v "+self.folder+":/Testbed -ti openjdk bash")
             time.sleep(10)
 
             # Install packages
             print self.run_cmd("docker container exec h"+str(i)+" apt-get update")
             #result = self.run_cmd("docker container exec h"+str(i)+" apt-get install -y net-tools iproute2 iputils-ping vim ethtool ")
-            result = self.run_cmd("docker container exec h"+str(i)+" apt-get install -y ethtool ")
+            result = self.run_cmd("docker container exec h"+str(i)+" apt-get install -y ethtool htop")
             print result[len(result)-6:len(result)]
 
             # Set netns
@@ -100,6 +104,7 @@ class Experiment:
 
         # Copy data file
         print self.run_cmd("docker container exec h"+str(self.number_of_hosts+1)+" cp /Testbed/random_text_500mb.txt /")
+        print self.run_cmd("docker container exec h" + str(self.number_of_hosts + 1) + " cp /Testbed/random_text_9mb.txt /")
 
         time.sleep(10)
 
