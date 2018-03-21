@@ -40,7 +40,7 @@ class Experiment:
 
         # Run switch
         print self.run_cmd("docker image pull p4lang/behavioral-model")
-        print self.run_cmd("screen -S bmv2 -d -m docker container run --name bmv2 --cpuset-cpus=\"1,2\" --network host -v "+self.folder+":/Testbed -e CMD_LINE=\""+cmdline+"\" -ti p4lang/behavioral-model bash")
+        print self.run_cmd("screen -S bmv2 -d -m docker container run --name bmv2 --cpuset-cpus=\"0,1\" --network host -v "+self.folder+":/Testbed -e CMD_LINE=\""+cmdline+"\" -ti p4lang/behavioral-model bash")
 
         # Run hosts
         print self.run_cmd("mkdir /var/run/netns")
@@ -50,7 +50,7 @@ class Experiment:
             #print self.run_cmd("screen -S h"+str(i)+" -d -m docker container run --name h"+str(i)+" -h h"+str(i)+" --cpuset-cpus=\""+str(7+(i*2)-1)+","+str(7+(i*2))+"\" --cap-add=NET_ADMIN --cap-add=SYS_ADMIN -v "+self.folder+":/Testbed -ti openjdk bash")
 
             #configuration for my laptop for 4 hosts (with 1 core per host)
-            print self.run_cmd("screen -S h"+str(i)+" -d -m docker container run --name h"+str(i)+" -h h"+str(i)+" --cpuset-cpus=\""+str((i+2))+"\" --cap-add=NET_ADMIN --cap-add=SYS_ADMIN -v "+self.folder+":/Testbed -ti openjdk bash")
+            print self.run_cmd("screen -S h"+str(i)+" -d -m docker container run --name h"+str(i)+" -h h"+str(i)+" --cpuset-cpus=\""+str((i+1))+"\" --cap-add=NET_ADMIN --cap-add=SYS_ADMIN -v "+self.folder+":/Testbed -ti openjdk bash")
             time.sleep(10)
 
             # Install packages
