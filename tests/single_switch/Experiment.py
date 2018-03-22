@@ -103,8 +103,8 @@ class Experiment:
         print self.run_cmd("docker container exec h"+str(self.number_of_hosts+1)+" nohup /DAIET-MapReduce/dist/bin/dfs-master -l dfsmaster.log -rp 7777 > /dev/null 2>&1 &")
 
         # Copy data file
-        print self.run_cmd("docker container exec h"+str(self.number_of_hosts+1)+" cp /Testbed/random_text_500mb.txt /")
-        print self.run_cmd("docker container exec h" + str(self.number_of_hosts + 1) + " cp /Testbed/random_text_9mb.txt /")
+        print self.run_cmd("docker container exec h"+str(self.number_of_hosts+1)+" cp /Testbed/DAIET/tests/data/random_text_500mb.txt /")
+        print self.run_cmd("docker container exec h" + str(self.number_of_hosts + 1) + " cp /Testbed/DAIET/tests/data/random_text_9mb.txt /")
 
         time.sleep(10)
 
