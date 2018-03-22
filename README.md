@@ -83,7 +83,7 @@ cd ..
 6. Extract the dataset:
 ```bash
 unzip DAIET/tests/data/random_text_500mb.zip
-unzip DAIET/tests/data/random_text_9mb.zip
+unzip DAIET/tests/data/random_text_80mb.zip
 ```
 7. We pin the container running the switch on the cores {4,5,6,7} and the 12 hosts containers on the cores from 8 to 31. You must change the parameter: “--cpuset-cpus”  **twice** in “DAIET/tests/single\_switch/Experiment.py” if you don’t have enough cores. 
 We also isolated those cores from kernel scheduling using the “isolcpus” kernel parameter.
